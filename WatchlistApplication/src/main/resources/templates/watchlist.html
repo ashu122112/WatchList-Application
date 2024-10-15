@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            /* Background image */
+            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/002/014/685/original/vintage-old-film-ornament-frame-background-video.jpg');
+            background-size: cover; /* Ensure the image covers the whole screen */
+            background-position: center;
+            background-attachment: fixed; /* Keep the image fixed when scrolling */
+            background-repeat: no-repeat;
+            color: #f8f9fa;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(255, 107, 107, 0.9); /* Slight transparency */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .navbar-nav .nav-item {
+            margin-right: 20px;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            background: linear-gradient(135deg, #ff6b6b, #ff8f6b);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-nav .nav-link i {
+            margin-right: 8px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background: linear-gradient(135deg, #ff8f6b, #ff6b6b);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.6);
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 36px;
+            margin-top: 40px;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            background-color: rgba(45, 45, 45, 0.9);
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        thead {
+            background-color: #ff6b6b;
+        }
+
+        th, td {
+            color: #f8f9fa;
+            text-align: center;
+        }
+
+        .btn-primary, .btn-danger {
+            border-radius: 30px;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .btn-danger {
+            background-color: #e63946;
+            border-color: #e63946;
+        }
+
+        .btn-primary:hover, .btn-danger:hover {
+            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .cta-btn {
+            font-size: 20px;
+            padding: 10px 30px;
+            border-radius: 50px;
+            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.5);
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            box-shadow: 0 8px 16px rgba(255, 107, 107, 0.7);
+            transform: translateY(-4px);
+        }
+
+        footer {
+            background-color: rgba(45, 45, 45, 0.9);
+            color: #adb5bd;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <title>Watchlist - Watchlist App</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-sm navbar-dark">
+            <a class="navbar-brand" href="#">Watchlist App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="watchlist">
+                            <i class="fas fa-list"></i> Watchlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="watchlistItemForm">
+                            <i class="fas fa-plus-circle"></i> Submit an Item
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Watchlist Section -->
+        <h2 class="text-center">Your Watchlist</h2>
+        <table class="table table-hover table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Rating</th>
+                    <th>Priority</th>
+                    <th>Comment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="movierow : ${watchlistrows}">
+                    <td th:text="${movierow.title}">Avatar</td>
+                    <td th:text="${movierow.rating}">7.8</td>
+                    <td th:text="${movierow.priority}">LOW</td>
+                    <td th:text="${movierow.comment}">Peter recommended</td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm" th:href="@{/watchlistItemForm(id=${movierow.id})}">Update</a>
+                        <form th:action="@{/deleteWatchlistItem(id=${movierow.id})}" method="post" style="display:inline;" onsubmit="return confirmDelete(this);">
+                            <button type="submit" class="btn btn-danger btn-sm ml-2">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div>
+            <div>Number of movies to watch: <span th:text="${noofmovies}"></span></div>
+        </div>
+
+        <div class="cta-section">
+            <a href="watchlistItemForm" class="btn btn-primary cta-btn">Add a New Movie</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2024 Watchlist App - Made with 💖 for movie enthusiasts.</p>
+        </footer>
+    </div>
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script type="text/javascript">
+        function confirmDelete(form) {
+            var confirmed = confirm("Are you sure you want to delete this item?");
+            return confirmed; // true if OK is pressed, false if Cancel is pressed
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+</html>
