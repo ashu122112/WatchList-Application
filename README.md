@@ -1,7 +1,9 @@
- Watchlist Application
+Watchlist Application
+
 A Spring Boot-based web application designed to help movie enthusiasts organize, track, and manage their personal movie watchlists. Users can register, log in, add new movies, view movie details (including fetched IMDb ratings), and update or delete entries from their watchlist.
 
 ✨ Features
+
 User Authentication & Authorization: Secure registration and login functionality using Spring Security.
 
 Personalized Watchlists: Each registered user has their own private watchlist.
@@ -19,6 +21,7 @@ Responsive UI: A clean and responsive user interface built with Thymeleaf, Boots
 Database Persistence: Movie and user data is persistently stored in a MySQL database.
 
 🛠️ Technologies Used
+
 Backend:
 
 Spring Boot (3.x)
@@ -48,9 +51,11 @@ External API:
 OMDB API (for movie ratings)
 
 🚀 Getting Started
+
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 Prerequisites
+
 Before you begin, ensure you have the following installed:
 
 Java Development Kit (JDK): Version 17 or higher.
@@ -62,9 +67,11 @@ MySQL Server: A running MySQL database instance.
 OMDB API Key: Obtain a free API key from http://www.omdbapi.com/apikey.aspx.
 
 Database Setup
+
 Create Database: Create a new database named watchmovie in your MySQL server.
 
 CREATE DATABASE watchmovie;
+
 
 
 
@@ -88,6 +95,7 @@ spring.jpa.hibernate.ddl-auto=update # Use 'update' for development, 'none' for 
 
 
 
+
 Note: For spring.jpa.hibernate.ddl-auto, update is suitable for development as it will create/update tables automatically without dropping data. For production, consider none and manage schema migrations manually.
 
 Initial Role Data (Optional but Recommended):
@@ -97,11 +105,14 @@ INSERT INTO roles (name) VALUES ('ROLE_USER');
 
 
 
+
 Running the Application
+
 Clone the repository:
 
 git clone https://github.com/your-username/watchlist-app.git # Replace with your actual repo URL
 cd watchlist-app
+
 
 
 
@@ -111,18 +122,22 @@ mvn clean install
 
 
 
+
 Run the application:
 
 mvn spring-boot:run
 
 
 
+
 The application will start on http://localhost:8080.
 
 Troubleshooting
+
 "Add a README" still showing on GitHub: If you've pushed the README.md file but GitHub still prompts you to add one, ensure the README.md file is located directly in the root directory of your repository, not inside a subfolder. Sometimes, a browser cache refresh (Ctrl + F5 or Cmd + Shift + R) might also be needed.
 
 🖥️ Usage
+
 Access the Application: Open your web browser and navigate to http://localhost:8080.
 
 Register: Click on the "Register" link to create a new user account. After successful registration, you will be redirected to the login page.
