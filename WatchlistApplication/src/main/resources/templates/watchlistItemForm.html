@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <!-- Meta tags -->
     <meta charset="utf-8">
@@ -12,160 +13,298 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <style>
         body {
-            /* Background image */
-            background-image: url('https://preview.redd.it/iid2ndw1ulo61.png?width=640&crop=smart&auto=webp&s=ce95b4fdef4fdd9e88ec9a61018c54d82f48783e'); /* Replace with your image URL */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
             color: #f8f9fa;
             font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding-top: 90px; /* Space for fixed navbar */
         }
 
         .navbar {
-            background-color: #ff6b6b;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: rgba(25, 25, 25, 0.98);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 0.8rem 2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
         }
 
         .navbar-brand {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 24px;
-        }
-
-        .navbar-nav .nav-item {
-            margin-right: 20px; /* Adds space between buttons */
-        }
-
-        .navbar-nav .nav-link {
-            font-size: 18px;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 50px;
-            transition: all 0.4s ease;
-            background: linear-gradient(135deg, #ff6b6b, #ff8f6b);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-            color: #fff !important;
+            font-size: 28px;
+            color: #e50914 !important;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
         }
 
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 32px;
+            color: #e50914;
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 15px;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 17px;
+            padding: 8px 20px;
+            margin: 5px 0;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
         .navbar-nav .nav-link i {
-            margin-right: 8px; /* Space between icon and text */
+            margin-right: 8px;
         }
 
         .navbar-nav .nav-link:hover {
-            background: linear-gradient(135deg, #ff8f6b, #ff6b6b);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.6);
+            background: rgba(229, 9, 20, 0.8);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.5);
+        }
+        
+        .navbar-nav .nav-item.active .nav-link {
+            background: #e50914;
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.7);
+            transform: translateY(-2px);
         }
 
-        h2 {
+        .form-container {
+            background-color: rgba(45, 45, 45, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container h2 {
             font-family: 'Montserrat', sans-serif;
             font-size: 36px;
-            color: #fff;
+            color: #e50914;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            text-align: center;
         }
 
-        .card {
-            background-color: #2d2d2d;
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .card-header {
-            background-color: #ff6b6b;
-            color: white;
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
+        .form-group label {
+            color: #f8f9fa; /* Ensure labels are visible */
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .form-control {
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.1);
-            transition: box-shadow 0.3s ease;
+            background-color: #3a3a3a; /* Darker input background */
+            color: #f8f9fa; /* White text for input */
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: #bbb; /* Lighter placeholder text */
         }
 
         .form-control:focus {
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            background-color: #4a4a4a;
+            color: #f8f9fa;
+            border-color: #e50914; /* Netflix red border on focus */
+            box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.3); /* Soft red glow */
+        }
+
+        .text-danger {
+            color: #ff6b6b !important; /* Brighter red for error messages */
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
         }
 
         .btn-primary {
-            background-color: #ff6b6b;
-            border-color: #ff6b6b;
-            border-radius: 0.5rem;
-            padding: 10px 20px;
-            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            background-color: #e50914;
+            border-color: #e50914;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            width: 100%; /* Make button full width */
         }
 
         .btn-primary:hover {
-            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.5);
+            background-color: #f40612;
+            border-color: #f40612;
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.5);
         }
 
         .footer {
-            margin-top: 30px;
+            background-color: rgba(25, 25, 25, 0.98);
+            color: #888;
+            padding: 30px;
             text-align: center;
-            color: #adb5bd;
+            margin-top: auto;
+            box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.3);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            font-size: 16px;
+        }
+
+        /* Logout button styling */
+        .btn-logout {
+            background: none;
+            border: none;
+            font-size: 17px; /* Consistent with nav-link */
+            padding: 8px 20px; /* Consistent with nav-link */
+            margin: 5px 0;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-logout:hover {
+            background: rgba(229, 9, 20, 0.8);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.5);
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 75px;
+            }
+            .navbar-brand {
+                font-size: 24px;
+            }
+            .navbar-brand i {
+                font-size: 28px;
+            }
+            .navbar-nav .nav-item {
+                margin-left: 0;
+                width: 100%;
+            }
+            .navbar-nav .nav-link {
+                justify-content: center;
+            }
+            .form-container {
+                padding: 25px;
+                margin-top: 20px;
+            }
+            .form-container h2 {
+                font-size: 30px;
+            }
+            .btn-primary {
+                font-size: 16px;
+                padding: 10px 25px;
+            }
         }
     </style>
-
-    <title>Submit an Item - Watchlist App</title>
+    <title>Watchlist Item Form</title>
 </head>
 <body>
-    <div class="container my-5">
+    <div class="container-fluid p-0">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm navbar-dark">
-            <a class="navbar-brand" href="#">Watchlist App</a>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-film"></i> Watchlist
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index">
+                    <li class="nav-item" th:classappend="${currentPath == '/' || currentPath == '/index'} ? 'active'">
+                        <a class="nav-link" href="/">
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="watchlist">
+                    <li class="nav-item" th:classappend="${currentPath.startsWith('/watchlist')} ? 'active'">
+                        <a class="nav-link" href="/watchlist">
                             <i class="fas fa-list"></i> Watchlist
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="watchlistItemForm">
-                            <i class="fas fa-plus-circle"></i> Submit an Item
+                    <li class="nav-item" th:classappend="${currentPath.startsWith('/watchlistItemForm')} ? 'active'">
+                        <a class="nav-link" href="/watchlistItemForm">
+                            <i class="fas fa-plus-circle"></i> Add Item
                         </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <!-- Show login/register when not authenticated -->
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/register">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                    
+                    <!-- Show user info and logout when authenticated -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <span class="nav-link text-white">
+                            <i class="fas fa-user"></i> 
+                            <span sec:authentication="name"></span>
+                        </span>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn-logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <!-- Card Section -->
-        <div class="card mt-4">
-            <div class="card-header">
-                <h2 class="mb-0">Submit an Item</h2>
-            </div>
-            <div class="card-body">
-                <form action="#" method="post" th:action="@{/watchlistItemForm}" th:object="${watchlistItem}">
+        <!-- Main Content -->
+        <div class="container">
+            <div class="form-container">
+                <h2 th:text="${watchlistItem.id == null ? 'Add New Watchlist Item' : 'Update Watchlist Item'}">Add New Watchlist Item</h2>
+                
+                <form action="#" th:action="@{/watchlistItem}" th:object="${watchlistItem}" method="post">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input th:field="*{title}" type="text" class="form-control" placeholder="Mandatory" required>
+                        <input th:field="*{title}" type="text" class="form-control" placeholder="Enter movie title" required>
                         <span class="text-danger" th:errors="*{title}"></span>
                     </div>
                     <div class="form-group">
                         <label for="rating">Rating</label>
-                        <input th:field="*{rating}" type="number" step="0.1" class="form-control" placeholder="5.0 < Number < 10.0" required>
+                        <!-- Removed 'readonly', changed type to 'number', added step, and updated placeholder -->
+                        <input th:field="*{rating}" type="number" step="0.1" class="form-control" placeholder="Enter rating (e.g., 7.5) or leave blank to auto-fetch" th:value="*{rating}">
                         <span class="text-danger" th:errors="*{rating}"></span>
                     </div>
                     <div class="form-group">
@@ -174,7 +313,7 @@
                         <span class="text-danger" th:errors="*{priority}"></span>
                     </div>
                     <div class="form-group">
-                        <label for="comments">Comments</label>
+                        <label for="comment">Comments</label>
                         <textarea th:field="*{comment}" class="form-control" rows="3" placeholder="Max. 50 chars" required></textarea>
                         <span class="text-danger" th:errors="*{comment}"></span>
                     </div>
@@ -188,7 +327,9 @@
 
         <!-- Footer Section -->
         <div class="footer">
-            <p>&copy; 2024 Watchlist App. All rights reserved.</p>
+            <div class="container">
+                <p>&copy; 2024 Watchlist App. All rights reserved. Made with <i class="fas fa-heart text-danger"></i> for movie enthusiasts.</p>
+            </div>
         </div>
     </div>
 

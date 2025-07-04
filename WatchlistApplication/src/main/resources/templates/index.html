@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <!-- Meta tags -->
     <meta charset="utf-8">
@@ -12,152 +14,397 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #1c1c1c;
+            /* Deeper, more immersive background */
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
             color: #f8f9fa;
             font-family: 'Raleway', sans-serif;
+            min-height: 100vh; /* Ensure full height for background */
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            padding-top: 90px; /* Added to prevent overlap with fixed navbar */
         }
 
         .navbar {
-            background-color: #ff6b6b;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: rgba(25, 25, 25, 0.98); /* Darker, slightly more opaque */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 0.8rem 2rem; /* Adjusted padding */
         }
 
         .navbar-brand {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 24px;
-        }
-
-        .navbar-nav .nav-item {
-            margin-right: 20px; /* Adds space between buttons */
-        }
-
-        .navbar-nav .nav-link {
-            font-size: 18px;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 50px;
-            transition: all 0.4s ease;
-            background: linear-gradient(135deg, #ff6b6b, #ff8f6b);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-            color: #fff !important;
+            font-size: 28px;
+            color: #e50914 !important; /* Netflix red */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
         }
 
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 32px;
+            color: #e50914;
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 15px; /* Adjusted spacing */
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 17px; /* Slightly smaller font for better fit */
+            padding: 8px 20px; /* Adjusted padding */
+            margin: 5px 0;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
         .navbar-nav .nav-link i {
-            margin-right: 8px; /* Space between icon and text */
+            margin-right: 8px; /* Adjusted spacing */
         }
 
         .navbar-nav .nav-link:hover {
-            background: linear-gradient(135deg, #ff8f6b, #ff6b6b);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.6);
+            background: rgba(229, 9, 20, 0.8); /* Netflix red on hover */
+            transform: translateY(-3px) scale(1.01); /* Less aggressive transform */
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.5); /* Adjusted shadow */
+        }
+        
+        .navbar-nav .nav-item.active .nav-link {
+            background: #e50914; /* Active Netflix red */
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.7); /* Adjusted shadow */
+            transform: translateY(-2px); /* Less aggressive transform */
         }
 
-        h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 36px;
-            margin-top: 40px;
-            color: #ff6b6b;
-        }
-
-        h5 {
-            font-weight: 400;
-            margin-bottom: 40px;
-            color: #adb5bd;
-        }
-
-        .btn-primary {
-            background-color: #ff6b6b;
-            border-color: #ff6b6b;
-            border-radius: 50px;
-            padding: 10px 30px;
-            font-size: 20px;
-            transition: box-shadow 0.3s ease, transform 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.5);
-            transform: translateY(-3px);
-        }
-
-        .movie-banner {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .cta-section {
+        .hero-section {
+            padding: 80px 0;
             text-align: center;
-            margin-top: 50px;
+            /* New background image from the provided URL */
+            background: url('https://t4.ftcdn.net/jpg/06/89/49/95/360_F_689499531_MeYeI1VVavgYQRzz0S3JxkQ9VxzgYZQh.jpg') no-repeat center center/cover;
+            min-height: 500px; /* Ensure the section has a visible height */
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* This dark overlay is applied on top of the background, adjust opacity if needed */
+            background: rgba(0, 0, 0, 0.6); 
+            z-index: -1;
+        }
+
+        .hero-section h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-section p {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            background-color: #e50914; /* Netflix red */
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+            text-decoration: none; /* Ensure it looks like a button */
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #f40612; /* Slightly brighter red */
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(229, 9, 20, 0.6);
+            color: #fff; /* Keep text white on hover */
+            text-decoration: none;
+        }
+
+        .content-section {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .content-section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            color: #e50914;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .content-section p {
+            font-size: 20px;
+            color: #ccc;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        .feature-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            background-color: rgba(40, 40, 40, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .feature-item i {
+            font-size: 50px;
+            color: #e50914;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .feature-item h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feature-item p {
+            font-size: 16px;
+            color: #b0b0b0;
+            line-height: 1.6;
+            text-align: center;
         }
 
         footer {
-            background-color: #2d2d2d;
-            color: #adb5bd;
-            padding: 20px;
+            background-color: rgba(25, 25, 25, 0.98); /* More opaque */
+            color: #888;
+            padding: 30px;
             text-align: center;
-            margin-top: 50px;
+            margin-top: auto; /* Pushes footer to the bottom */
+            box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.3);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            font-size: 16px;
+        }
+
+        /* Logout button styling */
+        .btn-logout {
+            background: none;
+            border: none;
+            font-size: 17px; /* Consistent with nav-link */
+            padding: 8px 20px; /* Consistent with nav-link */
+            margin: 5px 0;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-logout:hover {
+            background: rgba(229, 9, 20, 0.8);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.5);
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 75px; /* Adjust padding for smaller navbar on mobile */
+            }
+            .navbar-brand {
+                font-size: 24px;
+            }
+            .navbar-brand i {
+                font-size: 28px;
+            }
+            .navbar-nav .nav-item {
+                margin-left: 0;
+                width: 100%;
+            }
+            .navbar-nav .nav-link {
+                justify-content: center;
+            }
+            .hero-section {
+                padding: 60px 0; /* Reduced padding */
+            }
+            .hero-section h1 {
+                font-size: 48px; /* Smaller font size */
+            }
+            .hero-section p {
+                font-size: 18px; /* Smaller font size */
+            }
+            .cta-button {
+                font-size: 18px;
+                padding: 12px 30px;
+            }
+            .content-section {
+                padding: 40px 0; /* Reduced padding */
+            }
+            .content-section h2 {
+                font-size: 36px;
+            }
+            .content-section p {
+                font-size: 16px;
+            }
+            .feature-item {
+                width: 100%;
+                padding: 20px; /* Reduced padding */
+            }
         }
     </style>
 
-    <title>Watchlist App</title>
+    <title>Watchlist App - Your Ultimate Movie Companion</title>
 </head>
 
 <body>
-
-    <div class="container">
+    <div class="container-fluid p-0">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm navbar-dark">
-            <a class="navbar-brand" href="#">Watchlist App</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-film"></i> Watchlist
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                    <li class="nav-item" th:classappend="${currentPath == '/' || currentPath == '/index'} ? 'active'">
+                        <a class="nav-link" href="/">
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="watchlist">
+                    <li class="nav-item" th:classappend="${currentPath.startsWith('/watchlist')} ? 'active'">
+                        <a class="nav-link" href="/watchlist">
                             <i class="fas fa-list"></i> Watchlist
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="watchlistItemForm">
-                            <i class="fas fa-plus-circle"></i> Submit an Item
+                    <li class="nav-item" th:classappend="${currentPath.startsWith('/watchlistItemForm')} ? 'active'">
+                        <a class="nav-link" href="/watchlistItemForm">
+                            <i class="fas fa-plus-circle"></i> Add Item
                         </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <!-- Show login/register when not authenticated -->
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/register">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                    
+                    <!-- Show user info and logout when authenticated -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <span class="nav-link text-white">
+                            <i class="fas fa-user"></i> 
+                            <span sec:authentication="name"></span>
+                        </span>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn-logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
         </nav>
 
         <!-- Hero Section -->
-        <div class="text-center mt-4">
-            <h2>Welcome to the Watchlist Application!</h2>
-            <h5>Made for movie lovers who have a hard time choosing their next movie to watch.</h5>
-            <img src="https://nylonmanila.com/wp-content/uploads/2022/12/dec2-watchlist-2-1600x900.jpg" class="movie-banner" alt="Movie Banner">
+        <div class="hero-section">
+            <div class="container">
+                <h1>Your Ultimate Movie & TV Show Companion</h1>
+                <p>Organize, track, and discover your next favorite watch with ease. Never forget a movie again!</p>
+                <a href="/register" class="cta-button">Get Started - It's Free!</a>
+            </div>
         </div>
 
-        <!-- Call to Action Section -->
-        <div class="cta-section">
-            <p>Discover new movies and organize your watchlist with ease. Ready to dive in?</p>
-            <a href="watchlistItemForm" class="btn btn-primary cta-btn">Submit Your Favorite Movie</a>
+        <!-- Features Section -->
+        <div class="content-section">
+            <div class="container">
+                <h2>Why Choose Watchlist App?</h2>
+                <p>We've built a simple yet powerful tool to help you manage your entertainment. From tracking movies you want to watch to organizing your favorites, we've got you covered.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>Organize Your Watches</h3>
+                        <p>Keep a tidy list of all the movies and shows you plan to watch, have watched, or want to re-watch.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-star"></i>
+                        <h3>Rate & Review</h3>
+                        <p>Give your personal ratings and add comments to remember your thoughts on each title.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-search"></i>
+                        <h3>Discover New Content</h3>
+                        <p>Easily add new movies and shows with details fetched from external sources (like IMDb ratings).</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Footer -->
         <footer>
-            <p>© 2024 Watchlist App - Made with 💖 for movie enthusiasts.</p>
+            <div class="container">
+                <p>© 2024 Watchlist App. All rights reserved. Made with <i class="fas fa-heart text-danger"></i> for movie enthusiasts.</p>
+            </div>
         </footer>
     </div>
 
@@ -165,6 +412,5 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
 </body>
 </html>

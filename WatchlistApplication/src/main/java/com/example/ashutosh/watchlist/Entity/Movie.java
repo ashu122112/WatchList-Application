@@ -7,13 +7,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne; // Import ManyToOne
+import jakarta.persistence.JoinColumn; // Import JoinColumn
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
 public class Movie {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
 	@NotBlank(message="Please enter the title")
@@ -24,9 +26,16 @@ public class Movie {
 	
 	@Priority
 	private String priority;
+	
 	@Size(max=50,message="Comment should be maximum 50 characters")
 	private String comment;
 	
+    // Establish Many-to-One relationship with User
+    // Each movie belongs to one user
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false) // Foreign key column in 'movie' table
+    private User user; // The user who owns this movie
+
 	public Integer getId() {
 		return id;
 	}
@@ -57,6 +66,12 @@ public class Movie {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
